@@ -1,60 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Unimacar - Rota Real</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <meta charset="UTF-8">
+    <title>Unimacar - Rota Completa</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
     <style>
-        #map { 
-            height: 400px; 
-            width: 100%; 
-            border: 2px solid #ccc;
-            border-radius: 10px;
-        }
-        body { font-family: Arial, sans-serif; padding: 20px; }
+        #map { height: 550px; width: 100%; border-radius: 10px; border: 2px solid #ccc; }
+        body { font-family: sans-serif; padding: 20px; background-color: #f4f4f4; }
+        .painel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn-moto { padding: 10px 20px; cursor: pointer; background: #28a745; color: white; border: none; border-radius: 5px; margin-right: 10px; font-weight: bold; }
+        .btn-moto:hover { background: #218838; }
     </style>
 </head>
 <body>
 
-    <h1>Unimacar </h1>
-    <p><strong>Sequencia:</strong> {{ mensagem }}</p>
+<div class="painel">
+    <h2>📍 Solicitar Carona</h2>
+    <p>Insira sua localização e escolha o motorista:</p>
+    <input type="text" id="lat" value="-9.665" placeholder="Sua Latitude">
+    <input type="text" id="lng" value="-35.735" placeholder="Sua Longitude">
+    <br><br>
+    <button class="btn-moto" onclick="chamar('carlos')">Carlos (Uno)</button>
+    <button class="btn-moto" onclick="chamar('ana')">Ana (Onix)</button>
+    <button class="btn-moto" onclick="chamar('bruno')">Bruno (Gol)</button>
+</div>
 
-    <div id="map"></div>
+<div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([-9.665, -35.735], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    <script>
-      
-        var map = L.map('map').setView([-9.665, -35.735], 13);
+    var camadaRota;
+    var marcadores = [];
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
+    function chamar(idMoto) {
+        let latP = document.getElementById('lat').value;
+        let lngP = document.getElementById('lng').value;
 
-        var dadosGeoJSON = {{ rota_geojson | tojson | safe }};
-        var pA = {{ pontoA | safe }};
-        var pB = {{ pontoB | safe }};
-        var facul = {{ faculdade | safe }};
+        fetch('/gerar_rota', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ motorista: idMoto, lat: latP, lng: lngP })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // 1. Limpar mapa
+            if (camadaRota) map.removeLayer(camadaRota);
+            marcadores.forEach(m => map.removeLayer(m));
+            marcadores = [];
 
-        if (dadosGeoJSON && dadosGeoJSON.features) {
-            var camadaRota = L.geoJSON(dadosGeoJSON, {
-                style: {
-                    color: '#FF0000',
-                    weight: 4,
-                    opacity: 0.8
-                }
+            // 2. Desenhar a linha da rota
+            camadaRota = L.geoJSON(data, {
+                style: { color: '#007bff', weight: 6, opacity: 0.8 }
             }).addTo(map);
 
+            // 3. Colocar os 3 Pins baseados nas coordenadas da resposta
+            let pontos = data.metadata.query.coordinates;
+            
+            // Pin 1: Motorista (Início)
+            let pinMoto = L.marker([pontos[0][1], pontos[0][0]]).addTo(map)
+                .bindPopup("<b>Motorista</b>").openPopup();
+
+            // Pin 2: Embarque (Meio)
+            let pinEmb = L.marker([pontos[1][1], pontos[1][0]]).addTo(map)
+                .bindPopup("<b>Seu Ponto de Embarque</b>");
+
+            // Pin 3: Faculdade (Fim)
+            let pinFau = L.marker([pontos[2][1], pontos[2][0]]).addTo(map)
+                .bindPopup("<b>Destino: Faculdade</b>");
+
+            marcadores.push(pinMoto, pinEmb, pinFau);
+
+            // 4. Zoom automático para ver tudo
             map.fitBounds(camadaRota.getBounds(), {padding: [50, 50]});
-        }
+        });
+    }
+</script>
 
-        nome1 = L.marker(pA).addTo(map).bindPopup("Fulano (Carona) A");
-        nome2 = L.marker(pB).addTo(map).bindPopup("Ciclano (Motorista) B");
-        L.marker(facul).addTo(map).bindPopup("Faculdade").openPopup();
-
-    </script>
 </body>
 </html>
