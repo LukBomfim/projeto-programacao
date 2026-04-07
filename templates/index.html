@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unimacar - Rota Real</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        #map { 
+            height: 400px; 
+            width: 100%; 
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+        body { font-family: Arial, sans-serif; padding: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Unimacar </h1>
+    <p><strong>Sequencia:</strong> {{ mensagem }}</p>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+      
+        var map = L.map('map').setView([-9.665, -35.735], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var dadosGeoJSON = {{ rota_geojson | tojson | safe }};
+        var pA = {{ pontoA | safe }};
+        var pB = {{ pontoB | safe }};
+        var facul = {{ faculdade | safe }};
+
+        if (dadosGeoJSON && dadosGeoJSON.features) {
+            var camadaRota = L.geoJSON(dadosGeoJSON, {
+                style: {
+                    color: '#FF0000',
+                    weight: 4,
+                    opacity: 0.8
+                }
+            }).addTo(map);
+
+            map.fitBounds(camadaRota.getBounds(), {padding: [50, 50]});
+        }
+
+        nome1 = L.marker(pA).addTo(map).bindPopup("Fulano (Carona) A");
+        nome2 = L.marker(pB).addTo(map).bindPopup("Ciclano (Motorista) B");
+        L.marker(facul).addTo(map).bindPopup("Faculdade").openPopup();
+
+    </script>
+</body>
+</html>
