@@ -12,10 +12,10 @@ cursor.execute("""
                         cpf TEXT, 
                         data_de_nascimento TEXT,
                         senha TEXT,
-                        TELEFONE TEXT,
-                        AVALIACAO REAL, 
-                        BIOGRAFIA TEXT,
-                        
+                        telefone TEXT,
+                        avaliacao REAL, 
+                        biografia TEXT,
+                        universidade TEXT
                     
                    
                    )
@@ -24,10 +24,11 @@ cursor.execute("""
 cursor.execute("""
                CREATE TABLE IF NOT EXISTS Caronas (
                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                   Motorista INTEGER,
-                   Passageiro INTEGER,
-                   Destino TEXT,
-                   Horario TEXT
+                   motorista INTEGER,
+                   passageiro INTEGER,
+                   destino TEXT,
+                   horario TEXT,
+                   data TEXT
 )
             """) 
 
@@ -36,6 +37,7 @@ def cadastrar_usuario(nome, email, cpf, data_de_nascimento, senha, telefone, ava
                    INSERT INTO usuarios (nome, email, cpf, data_de_nascimento, senha, telefone, avaliacao, biografia)
                    values (?, ?, ?, ?, ?, ?, ?, ?)
                    """, (nome, email, cpf, data_de_nascimento, senha, telefone, avaliacao, biografia))
+    conexao.commit()
 
 def buscar_usuario(id):
     cursor.execute("SELECT * FROM usuarios WHERE id = ?", (id,))
@@ -44,3 +46,16 @@ def buscar_usuario(id):
 def buscar_caronas():
     cursor.execute("SELECT * FROM caronas")
     return cursor.fetchall()
+
+def buscar_usuarios_login(email,senha):
+    cursor.execute("SELECT * FROM usuarios WHERE email = ? AND senha = ?",(email,senha))
+    return cursor.fetchone()
+    
+def cadastrar_carona(motorista, passageiro, destino, horario, data):
+    cursor.execute("""
+                   
+                   INSERT INTO caronas (motorista, passageiro, destino, horario, data)
+                   values (?, ?, ?, ?, ?)
+                   
+                    """, (motorista, passageiro, destino, horario, data))
+    conexao.commit()
