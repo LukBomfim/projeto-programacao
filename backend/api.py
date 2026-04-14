@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -45,3 +46,6 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
+=======
+# Parte do Arthur
+>>>>>>> 6deac7abb11b0590544848348143025e2d897629
