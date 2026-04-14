@@ -15,7 +15,7 @@ def processar_corrida():
             "exemplo_json": {
                 "distancia": 10,
                 "tempo": 20,
-                "destino": "Praia"
+                "destino": "Unima"
             }
         })
     
