@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -8,7 +8,6 @@ CORS(app)
 @app.route('/dados-corrida', methods=['GET', 'POST'])
 def processar_corrida():
 
-    # Se a pessoa acessar pelo navegador (GET), mostra as instruções
     if request.method == 'GET':
         return jsonify({
             "mensagem": "API de corrida funcionando!",
@@ -20,7 +19,6 @@ def processar_corrida():
             }
         })
     
-    # Se for POST (o JavaScript do mapa enviando os dados)
     dados = request.json or {}
     
     distancia = dados.get('distancia')
@@ -46,6 +44,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-=======
-# Parte do Arthur
->>>>>>> 6deac7abb11b0590544848348143025e2d897629
+
