@@ -3,29 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Título da base</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>{% block titulo %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
-        <nav>
-            <h1>
-                <a href="index.html">Início</a>
-            </h1>
+        <h1>
+            <a href="/" id="titulo"> Arena Error</a>
+        </h1>
 
-            <a href="">Página1</a>
-            <a href="">Pagina2</a>
-            
+        <nav>
+            <a href="">Início</a>
+            <a href="">Conta</a>
+            {% block navbar %}{% endblock %}
         </nav>
     </header>
     
     <hr>
     
     <main> <!-- CONTEÚDO PRINCIPAL -->
-
+        {% block content %}
+        {% endblock %}
     </main>
 
     <hr>
+
+    <footer> <!-- RODAPÉ -->
+            Projeto de Programação - UNIMA
+    </footer>
     
 </body>
 </html>
