@@ -1,6 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 
-app = Flask(__name__, template_folder='frontend/templates')
+app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
 @app.route('/')
 def homepage():
