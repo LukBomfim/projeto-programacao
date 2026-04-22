@@ -1,0 +1,28 @@
+<!-- tela do campeonato p/ user comum -->
+
+{% extends 'base.html' %}
+
+{% block titulo %}{{ campeonato.nome }}{% endblock %}
+
+{% block navbar %}
+    <a href="">Apostas</a>
+{% endblock %}
+
+{% block opcoes %}
+    <a href="">Futebol</a>
+    <a href="">Basquete</a>
+    <a href="">MMA</a>
+    <a href="">Judô</a>
+    <a href="">Jiu-Jitsu</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h2>{{ campeonato.nome }}</h2>
+        <p>{{ campeonato.modalidade }}</p>
+        <p>{{ campeonato.data }}</p>
+        <p>{{ campeonato.descricao }}</p>
+    </div>
+
+{% endblock %}

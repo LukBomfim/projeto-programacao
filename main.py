@@ -10,5 +10,10 @@ def homepage():
 def cadastro():
     return render_template('cadastro.html')
 
+@app.route('/campeonato/<int:id>')
+def campeonato(id):
+    
+    return render_template('comum/campeonato.html', campeonato='')
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
