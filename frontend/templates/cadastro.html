@@ -10,9 +10,12 @@
         <h1>
             <a href="/">bet404</a>
         </h1>
-        <h2>Cadastro</h2>
     </header>
+
+    <hr>
+
     <main>
+        <h2>Cadastro</h2>
 
         <form method="post">
             <select name="tipo_conta" id="tipo-conta">
@@ -70,15 +73,23 @@
                 <label><input type="checkbox" name="modalidades"> Jiu-Jitsu</label>
             </div>
             
-            <button type="submit">
+            <button type="submit" style="display: none;" id="btn-cadastrar">
                 Cadastrar
             </button>
         </form>
-        <a href="">
+        <a href="/login">
             Já possui uma conta?
         </a>
         
     </main>
+
+    <hr>
+
+    <footer>
+        <a href="https://github.com/LukBomfim/projeto-programacao" target="_blank">
+            Projeto de programação
+        </a>
+    </footer>
 
 </body>
 <script>
@@ -87,21 +98,25 @@
     desabilitar('campos-equipe')
     desabilitar('campos-organizacao')
 
-    document.getElementById("tipo-conta").addEventListener("change", function() {
+    document.getElementById('tipo-conta').addEventListener('change', function() {
         const tipo = this.value
 
-        document.getElementById("campos-comum").style.display = "none"
-        document.getElementById("campos-equipe").style.display = "none"
-        document.getElementById("campos-organizacao").style.display = "none"
+        document.getElementById('campos-comum').style.display = 'none'
+        document.getElementById('campos-equipe').style.display = 'none'
+        document.getElementById('campos-organizacao').style.display = 'none'
+        document.getElementById('btn-cadastrar').style.display = 'none'
 
         if (tipo === "usuario") {
-        document.getElementById("campos-comum").style.display = "block"
+        document.getElementById('campos-comum').style.display = 'block'
+        document.getElementById('btn-cadastrar').style.display = 'block'
         }
         if (tipo === "equipe") {
-        document.getElementById("campos-equipe").style.display = "block"
+        document.getElementById('campos-equipe').style.display = 'block'
+        document.getElementById('btn-cadastrar').style.display = 'block'
         }
         if (tipo === "organizacao") {
-        document.getElementById("campos-organizacao").style.display = "block"
+        document.getElementById('campos-organizacao').style.display = 'block'
+        document.getElementById('btn-cadastrar').style.display = 'block'
         }
     })
 
