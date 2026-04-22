@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | bet404</title>
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="/">bet404</a>
+        </h1>
+        <h2>Cadastro</h2>
+    </header>
+    <main>
+
+        <form method="post">
+            <select name="tipo_conta" id="tipo-conta">
+                <option value="">Selecione um tipo de conta</option>
+                <option value="usuario">Usuário comum</option>
+                <option value="equipe">Equipe esportiva</option>
+                <option value="organizacao">Organização de campeonato</option>
+            </select>
+            <br>
+
+            <!-- USUARIO COMUM -->
+            <div id="campos-comum" style="display: none;">
+                <input type="text" name="nome" placeholder="Nome completo"> <br>
+                <input type="number" name="cpf" placeholder="CPF"> <br>
+                <input type="date" name="nascimento" placeholder="Data de nascimento"> <br>
+                <input type="number" name="numero" placeholder="Número"> <br>
+                <input type="email" name="email" placeholder="E-mail"> <br>
+                <input type="password" name="senha" placeholder="Senha"> <br>
+                <input type="password" name="confirmar_senha" placeholder="Confirme a senha"> <br>
+            </div>
+
+            <!-- EQUIPE ESPORTIVA -->
+            <div id="campos-equipe" style="display: none;">
+                <input type="text" name="nome_equipe" placeholder="Nome da equipe"> <br>
+                <input type="number" name="cnpj" placeholder="CNPJ"> <br>
+                <input type="number" name="numero" placeholder="Número"> <br>
+                <input type="email" name="email" placeholder="E-mail"> <br>
+                <input type="password" name="senha" placeholder="Senha"> <br>
+                <input type="password" name="confirmar_senha" placeholder="Confirme a senha"> <br>
+
+                <select name="modalidade">
+                    <option value="">Selecione a modalidade</option>
+                    <option value="">Futebol</option>
+                    <option value="">Basquete</option>
+                    <option value="">MMA</option>
+                    <option value="">Judô</option>
+                    <option value="">Jiu-Jitsu</option>
+                </select>
+            </div>
+
+            <!-- ORGANIZAÇÃO DE CAMPEONATO -->
+            <div id="campos-organizacao" style="display: none;">
+                <input type="text" name="nome_equipe" placeholder="Nome da organização"> <br>
+                <input type="number" name="cnpj" placeholder="CNPJ"> <br>
+                <input type="number" name="numero" placeholder="Número"> <br>
+                <input type="email" name="email" placeholder="E-mail"> <br>
+                <input type="password" name="senha" placeholder="Senha"> <br>
+                <input type="password" name="confirmar_senha" placeholder="Confirme a senha"> <br>
+
+                <p>Selecione as modalidades:</p><br>
+                <label><input type="checkbox" name="modalidades"> Futebol</label>
+                <label><input type="checkbox" name="modalidades"> Basquete</label>
+                <label><input type="checkbox" name="modalidades"> MMA</label>
+                <label><input type="checkbox" name="modalidades"> Judô</label>
+                <label><input type="checkbox" name="modalidades"> Jiu-Jitsu</label>
+            </div>
+            
+            <button type="submit">
+                Cadastrar
+            </button>
+        </form>
+        <a href="">
+            Já possui uma conta?
+        </a>
+        
+    </main>
+
+</body>
+<script>
+
+    desabilitar('campos-comum')
+    desabilitar('campos-equipe')
+    desabilitar('campos-organizacao')
+
+    document.getElementById("tipo-conta").addEventListener("change", function() {
+        const tipo = this.value
+
+        document.getElementById("campos-comum").style.display = "none"
+        document.getElementById("campos-equipe").style.display = "none"
+        document.getElementById("campos-organizacao").style.display = "none"
+
+        if (tipo === "usuario") {
+        document.getElementById("campos-comum").style.display = "block"
+        }
+        if (tipo === "equipe") {
+        document.getElementById("campos-equipe").style.display = "block"
+        }
+        if (tipo === "organizacao") {
+        document.getElementById("campos-organizacao").style.display = "block"
+        }
+    })
+
+    function desabilitar(id) {
+        document.querySelectorAll('#' + id + 'input, #' + id + 'select').forEach(function(campo){
+            campo.disabled = true
+        })
+    }
+
+    function habilitar(id) {
+        document.querySelectorAll('#' + id + 'input, #' + id + 'select').forEach(function(campo){
+            campo.disabled = false
+        })
+    }
+</script>
+</html>
