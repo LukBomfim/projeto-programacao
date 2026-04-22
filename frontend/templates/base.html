@@ -3,20 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block titulo %}{% endblock %} | Arena</title>
+    <title>{% block titulo %}{% endblock %} | bet404</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header>
         <h1>
-            <a href="/" id="titulo"> Arena Error</a>
+            <a href="/" id="titulo">bet404</a>
         </h1>
 
-        <nav>
+        <nav aria-label="nav principal">
             <a href="/">Início</a>
-            <a href="">Esportes</a>
             {% block navbar %}{% endblock %}
+            <a href="">Sua conta</a>
         </nav>
+
+        <nav aria-label="nav secundario">
+            {% block opcoes %}{% endblock %}
+        </nav>
+        
     </header>
     
     <hr>
@@ -29,7 +34,7 @@
     <hr>
 
     <footer> <!-- RODAPÉ -->
-            Projeto de Programação - UNIMA
+            Projeto de Programação
     </footer>
     
 </body>

@@ -1,15 +1,103 @@
+<!-- tela inicial para usuario comum -->
+
 {% extends 'base.html' %}
 
 {% block titulo %}Início{% endblock %}
 
 {% block navbar %}
-    <a href="/pagina1">Pagina1</a>
-    <a href="/pagina2">Pagina2</a>
-    <a href="/pagina3">Pagina3</a>
-    <a href="/pagina4">Pagina4</a>
-    <a href="/pagina5">Pagina5</a>
+    <a href="">Esportes</a>
+    <a href="">Apostas</a>
+{% endblock %}
+
+{% block opcoes %}
+    <a href="">Futebol</a>
+    <a href="">Basquete</a>
+    <a href="">MMA</a>
+    <a href="">Judô</a>
+    <a href="">Jiu-Jitsu</a>
 {% endblock %}
 
 {% block content %}
-    
+    <div class="container">
+        <h2>
+            CAMPEONATOS RECOMENDADOS
+        </h2>
+        <div id="campeonatos">
+
+            <a href="" class="campeonato">
+                <h3>
+                    Campeonato exemplo
+                </h3>
+
+                <p>
+                    Modalidade
+                </p>
+
+                <div class="participantes">
+                    <img src="" alt="participante1">
+                    <img src="" alt="participante2">
+                    <img src="" alt="participante3">
+                    <img src="" alt="participante4">
+                </div>
+
+                <p>
+                    Informações adicionais
+                </p>
+            </a>
+
+        </div>
+    </div>
+    <div class="container">
+        <h2>
+            PRÓXIMAS PARTIDAS
+        </h2>
+
+        <div id="proximas-partidas">
+
+            <a href="" class="partida">
+                <h3>
+                    Partida exemplo
+                </h3>
+
+                <p>
+                    Modalidade
+                </p>
+
+                <div class="participantes">
+                    <img src="" alt="participante1">
+                    <img src="" alt="participante2">
+                </div>
+
+                <p>
+                    Informações adicionais
+                </p>
+            </a>
+
+        </div>
+    </div>
+    <div id="ultimas-partidas">
+        <h2>
+            RESULTADOS RECENTES
+        </h2>
+
+        <a href="" class="partida">
+            <h3>
+                Partida exemplo
+            </h3>
+
+            <p>
+                Modalidade
+            </p>
+
+            <div class="participantes">
+                <img src="" alt="participante1">
+                <img src="" alt="participante2">
+            </div>
+            <p>
+                Informações adicionais
+            </p>
+        </a>
+
+    </div>
+
 {% endblock %}
