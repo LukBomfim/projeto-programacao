@@ -1,0 +1,685 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+  
+    --verde-primary: #00C853;
+    --verde-hover: #00E676;
+    --verde-dark: #00A043;
+    
+    --azul-primary: #2196F3;
+    --azul-dark: #1976D2;
+    
+    --cinza-escuro: #1A1A1A;
+    --cinza-medio: #2D2D2D;
+    --cinza-claro: #757575;
+    --cinza-muito-claro: #E0E0E0;
+    
+    --branco: #FFFFFF;
+    --preto: #000000;
+    
+   
+    --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --sombra-card-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --sombra-header: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+   
+    --espaco-xs: 4px;
+    --espaco-sm: 8px;
+    --espaco-md: 16px;
+    --espaco-lg: 24px;
+    --espaco-xl: 32px;
+    --espaco-2xl: 48px;
+    
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+    
+
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--cinza-escuro);
+    background: var(--branco);
+    overflow-x: hidden;
+}
+
+
+header {
+    background: var(--cinza-escuro);
+    color: var(--branco);
+    padding: var(--espaco-lg) var(--espaco-xl);
+    box-shadow: var(--sombra-header);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 {
+    margin-bottom: var(--espaco-md);
+}
+
+header h1 a#titulo {
+    color: var(--branco);
+    text-decoration: none;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    transition: var(--transition-fast);
+}
+
+header h1 a#titulo:hover {
+    color: var(--verde-primary);
+}
+
+header nav[aria-label="nav principal"] {
+    display: flex;
+    gap: var(--espaco-lg);
+    margin-bottom: var(--espaco-md);
+    flex-wrap: wrap;
+}
+
+header nav[aria-label="nav principal"] a {
+    color: var(--branco);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: var(--espaco-sm) var(--espaco-md);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+header nav[aria-label="nav principal"] a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--verde-primary);
+}
+
+header nav[aria-label="nav secundario"] {
+    display: flex;
+    gap: var(--espaco-sm);
+    overflow-x: auto;
+    padding: var(--espaco-sm) 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+header nav[aria-label="nav secundario"]::-webkit-scrollbar {
+    display: none;
+}
+
+header nav[aria-label="nav secundario"] a {
+    background: var(--branco);
+    color: var(--cinza-escuro);
+    text-decoration: none;
+    padding: var(--espaco-sm) var(--espaco-md);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: var(--transition-fast);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header nav[aria-label="nav secundario"] a:hover {
+    background: var(--verde-primary);
+    color: var(--branco);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 200, 83, 0.3);
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: var(--cinza-muito-claro);
+    margin: 0;
+}
+
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--espaco-2xl) var(--espaco-xl);
+    min-height: calc(100vh - 300px);
+}
+
+.container {
+    background: var(--branco);
+    border-radius: var(--radius-lg);
+    padding: var(--espaco-xl);
+    margin-bottom: var(--espaco-xl);
+    box-shadow: var(--sombra-card);
+    transition: var(--transition-normal);
+}
+
+.container:hover {
+    box-shadow: var(--sombra-card-hover);
+}
+
+.container h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--espaco-lg);
+    color: var(--cinza-escuro);
+}
+
+
+.banner-promo {
+    background: linear-gradient(135deg, var(--verde-primary) 0%, var(--verde-hover) 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--espaco-xl);
+    margin-bottom: var(--espaco-xl);
+    color: var(--branco);
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.banner-promo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>');
+    background-size: 80px;
+    opacity: 0.3;
+}
+
+.banner-promo h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: var(--espaco-sm);
+    position: relative;
+    z-index: 1;
+}
+
+.banner-promo p {
+    font-size: 1.125rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+
+#campeonatos,
+#proximas-partidas,
+#ultimas-partidas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--espaco-lg);
+}
+
+.campeonato,
+.partida {
+    background: var(--branco);
+    border-radius: var(--radius-md);
+    padding: var(--espaco-lg);
+    text-decoration: none;
+    color: var(--cinza-escuro);
+    border: 2px solid var(--cinza-muito-claro);
+    transition: var(--transition-normal);
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.campeonato::before,
+.partida::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--verde-primary);
+    transform: scaleY(0);
+    transition: var(--transition-normal);
+}
+
+.campeonato:hover,
+.partida:hover {
+    border-color: var(--verde-primary);
+    box-shadow: var(--sombra-card-hover);
+    transform: translateY(-4px);
+}
+
+.campeonato:hover::before,
+.partida:hover::before {
+    transform: scaleY(1);
+}
+
+.campeonato h3,
+.partida h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: var(--espaco-sm);
+    color: var(--cinza-escuro);
+}
+
+.campeonato p,
+.partida p {
+    font-size: 0.875rem;
+    color: var(--cinza-claro);
+    margin-bottom: var(--espaco-sm);
+}
+
+
+.participantes {
+    display: flex;
+    gap: var(--espaco-sm);
+    margin: var(--espaco-md) 0;
+    align-items: center;
+}
+
+.participantes img {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--branco);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    background: var(--cinza-muito-claro);
+}
+
+
+.badge {
+    display: inline-block;
+    background: var(--preto);
+    color: var(--branco);
+    padding: var(--espaco-xs) var(--espaco-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--espaco-sm);
+}
+
+.badge.verde {
+    background: var(--verde-primary);
+}
+
+.badge.azul {
+    background: var(--azul-primary);
+}
+
+.ver-todos {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-xs);
+    color: var(--verde-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition-fast);
+    margin-top: var(--espaco-md);
+}
+
+.ver-todos:hover {
+    color: var(--verde-hover);
+    gap: var(--espaco-sm);
+}
+
+.ver-todos::after {
+    content: '→';
+    font-size: 1.125rem;
+}
+
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--espaco-sm);
+    color: var(--cinza-escuro);
+    font-size: 0.875rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: var(--espaco-md);
+    border: 2px solid var(--cinza-muito-claro);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--transition-fast);
+    background: var(--branco);
+    margin-bottom: var(--espaco-lg);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--verde-primary);
+    box-shadow: 0 0 0 3px rgba(0, 200, 83, 0.1);
+}
+
+input::placeholder {
+    color: var(--cinza-claro);
+}
+
+
+select {
+    appearance: none;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23757575" d="M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right var(--espaco-md) center;
+    padding-right: var(--espaco-2xl);
+    cursor: pointer;
+}
+
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-right: var(--espaco-sm);
+    cursor: pointer;
+    accent-color: var(--verde-primary);
+}
+
+
+button,
+.btn {
+    display: inline-block;
+    padding: var(--espaco-md) var(--espaco-xl);
+    background: var(--preto);
+    color: var(--branco);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    text-align: center;
+    font-family: inherit;
+}
+
+button:hover,
+.btn:hover {
+    background: var(--cinza-medio);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active,
+.btn:active {
+    transform: translateY(0);
+}
+
+button[type="submit"],
+.btn-primary {
+    background: var(--verde-primary);
+}
+
+button[type="submit"]:hover,
+.btn-primary:hover {
+    background: var(--verde-hover);
+    box-shadow: 0 4px 12px rgba(0, 200, 83, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 2px solid var(--cinza-escuro);
+    color: var(--cinza-escuro);
+}
+
+.btn-secondary:hover {
+    background: var(--cinza-escuro);
+    color: var(--branco);
+}
+
+/* Botão Limpar (outline) */
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--cinza-muito-claro);
+    color: var(--cinza-escuro);
+}
+
+.btn-outline:hover {
+    border-color: var(--cinza-escuro);
+    background: var(--cinza-muito-claro);
+}
+
+
+
+main h2 {
+    text-align: center;
+    margin-bottom: var(--espaco-xl);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+form + a {
+    display: block;
+    text-align: center;
+    margin-top: var(--espaco-lg);
+    color: var(--verde-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+form + a:hover {
+    color: var(--verde-hover);
+    text-decoration: underline;
+}
+
+#campos-comum,
+#campos-equipe,
+#campos-organizacao {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+footer {
+    background: var(--cinza-escuro);
+    color: var(--branco);
+    text-align: center;
+    padding: var(--espaco-xl);
+    margin-top: var(--espaco-2xl);
+}
+
+footer a {
+    color: var(--verde-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+footer a:hover {
+    color: var(--verde-hover);
+    text-decoration: underline;
+}
+
+.area-chave {
+    background: var(--branco);
+    border-radius: var(--radius-lg);
+    padding: var(--espaco-xl);
+    margin-top: var(--espaco-lg);
+    border: 2px dashed var(--cinza-muito-claro);
+    text-align: center;
+    color: var(--cinza-claro);
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 768px) {
+    :root {
+        font-size: 14px;
+    }
+    
+    header {
+        padding: var(--espaco-md) var(--espaco-lg);
+    }
+    
+    main {
+        padding: var(--espaco-lg) var(--espaco-md);
+    }
+    
+    .container {
+        padding: var(--espaco-lg);
+    }
+    
+    #campeonatos,
+    #proximas-partidas,
+    #ultimas-partidas {
+        grid-template-columns: 1fr;
+    }
+    
+    header nav[aria-label="nav principal"] {
+        flex-direction: column;
+        gap: var(--espaco-sm);
+    }
+    
+    .banner-promo {
+        min-height: 140px;
+        padding: var(--espaco-lg);
+    }
+    
+    .banner-promo h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 a#titulo {
+        font-size: 1.5rem;
+    }
+    
+    .container h2 {
+        font-size: 1rem;
+    }
+    
+    form {
+        max-width: 100%;
+    }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: var(--espaco-sm); }
+.mt-2 { margin-top: var(--espaco-md); }
+.mt-3 { margin-top: var(--espaco-lg); }
+.mt-4 { margin-top: var(--espaco-xl); }
+
+.mb-1 { margin-bottom: var(--espaco-sm); }
+.mb-2 { margin-bottom: var(--espaco-md); }
+.mb-3 { margin-bottom: var(--espaco-lg); }
+.mb-4 { margin-bottom: var(--espaco-xl); }
+
+.hidden {
+    display: none !important;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gap-1 { gap: var(--espaco-sm); }
+.gap-2 { gap: var(--espaco-md); }
+.gap-3 { gap: var(--espaco-lg); }
+
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+::selection {
+    background: var(--verde-primary);
+    color: var(--branco);
+}
+
+::-moz-selection {
+    background: var(--verde-primary);
+    color: var(--branco);
+}
