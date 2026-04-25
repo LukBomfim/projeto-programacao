@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Início{% endblock %}
+
+
+{% block opcoes %}
+    <a href="/equipe/competicoes">Campeonatos</a>
+    <a href="/equipe/inscricoes">Inscrições</a>
+    <a href="/equipe/convites">Convites</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h2>
+            CAMPEONATOS INSCRITOS
+        </h2>
+
+        <div>
+
+            <a href="/equipe/campeonatos/1">
+                <h3>
+                    Campeonato exemplo
+                </h3>
+                <img src="" alt="Imagem do campeonato">
+                <p>
+                    Informações
+                </p>
+            </a>
+
+        </div>
+    </div>
+    <div class="container">
+        <h2>
+            CAMPEONATOS RECOMENDADOS
+        </h2>
+
+        <div>
+
+            <a href="/equipe/campeonatos/2">
+                <h3>
+                    Campeonato exemplo
+                </h3>
+                <img src="" alt="Imagem do campeonato">
+                <p>
+                    Informações
+                </p>
+            </a>
+            
+        </div>
+    </div>
+
+
+{% endblock %}
