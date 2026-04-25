@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Partida{% endblock %}
+
+{% block navbar %}
+    <a href="">Apostas</a>
+{% endblock %}
+
+{% block opcoes %}
+    <a href="">Futebol</a>
+    <a href="">Basquete</a>
+    <a href="">MMA</a>
+    <a href="">Judô</a>
+    <a href="">Jiu-Jitsu</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h2>{{ partida.nome }}</h2>
+        <p>{{ partida.modalidade }}</p>
+        <p>{{ partida.data }}</p>
+        <p>{{ partida.descricao }}</p>
+    </div>
+
+    <div class="container">
+        Resultado final: {{ partida.resultado }}
+    </div>
+
+{% endblock %}
