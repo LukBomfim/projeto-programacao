@@ -47,5 +47,9 @@ def equipe_campeonato(id):
 def equipe_campeonatos():
     return render_template('equipe/campeonatos.html')
 
+@app.route('/equipe/historico')
+def equipe_historico():
+    return render_template('equipe/historico.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
