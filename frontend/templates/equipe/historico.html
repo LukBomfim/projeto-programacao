@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block titulo %}Campeonatos{% endblock %}
+{% block titulo %}Histórico{% endblock %}
 
 {% block opcoes %}
     <a href="/equipe/campeonatos">Disponíveis</a>
@@ -11,12 +11,14 @@
 {% endblock %}
 
 {% block content %}
-    <input type="text" name="" id="" placeholder="Pesquisar">
+    <h2>
+        CAMPEONATOS ANTERIORES
+    </h2>
 
     <div class="container">
-        <a href="/equipe/campeonatos/1">
+        <a href="">
             <h3>
-                Campeonato X
+                Campeonato exemplo
             </h3>
             <img src="" alt="Imagem do campeonato">
             <p>
@@ -25,15 +27,4 @@
         </a>
     </div>
 
-    <div class="container">
-        <a href="/equipe/campeonatos/2">
-            <h3>
-                Campeonato Y
-            </h3>
-            <img src="" alt="Imagem do campeonato">
-            <p>
-                Informações
-            </p>
-        </a>
-    </div>
 {% endblock %}
