@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Nome do campeonato{% endblock %}
+
+{% block opcoes %}
+    <a href="">Campeonatos</a>
+    <a href="">Inscrições</a>
+    <a href="">Convites</a>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        Campeonato exemplo
+    </h2>
+    <img src="" alt="Foto do campeonato">
+
+    <div class="container">
+        <h3>
+            Equipes inscritas
+        </h3>
+
+        <div>
+            <h4>
+                Equipe exemplo
+            </h4>
+            <img src="" alt="Imagem da equipe">
+            <p>
+                Informações
+            </p>
+        </div>
+
+    </div>
+    <div class="container">
+        <h3>
+            Informações adicionais
+        </h3>
+
+        <p>
+            Informações adicionais sobre o campeonato
+        </p>
+    </div>
+
+    {% if campeonato_inscrito %}
+        <button disabled>
+            Inscrito
+        </button>
+    {% else %}
+        <button>
+            Solicitar inscrição
+        </button>
+    {% endif %}
+
+{% endblock %}
