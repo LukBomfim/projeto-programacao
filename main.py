@@ -4,7 +4,13 @@ app = Flask(__name__, template_folder='frontend/templates', static_folder='front
 
 @app.route('/')
 def homepage():
-    return render_template('index.html')
+    tipo_usuario = 'equipe'
+    if tipo_usuario == 'equipe':
+        return render_template('equipe/inicio.html')
+    if tipo_usuario == 'organizador':
+        return render_template('organizador/inicio.html')
+    else:
+        return render_template('index.html')
 
 @app.route('/login')
 def login():
@@ -29,6 +35,15 @@ def partida(id):
 @app.route('/apostas')
 def apostas():
     return render_template('comum/apostas.html')
+
+@app.route('/equipe/campeonatos/<int:id>')
+def equipe_campeonato(id):
+    if id == 1:
+        return render_template('equipe/campeonato-inscrito.html', campeonato='')
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
