@@ -26,6 +26,9 @@ def partida(id):
     elif id == 2:
         return render_template('comum/partida-finalizada.html', partida='Partida Exemplo 2')
 
+@app.route('/apostas')
+def apostas():
+    return render_template('comum/apostas.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
