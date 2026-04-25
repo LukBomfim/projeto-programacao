@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Campeonatos{% endblock %}
+
+{% block opcoes %}
+    <a href="/equipe/campeonatos">Disponíveis</a>
+    <a href="">Inscrições</a>
+    <a href="">Convites</a>
+    <a href="">Atletas/Subs</a>
+{% endblock %}
+
+{% block content %}
+    <input type="text" name="" id="" placeholder="Pesquisar">
+
+    <div class="container">
+        <a href="/equipe/campeonatos/1">
+            <h3>
+                Campeonato X
+            </h3>
+            <img src="" alt="Imagem do campeonato">
+            <p>
+                Informações
+            </p>
+        </a>
+    </div>
+
+    <div class="container">
+        <a href="/equipe/campeonatos/2">
+            <h3>
+                Campeonato Y
+            </h3>
+            <img src="" alt="Imagem do campeonato">
+            <p>
+                Informações
+            </p>
+        </a>
+    </div>
+{% endblock %}
