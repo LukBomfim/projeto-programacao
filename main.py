@@ -4,7 +4,7 @@ app = Flask(__name__, template_folder='frontend/templates', static_folder='front
 
 @app.route('/')
 def homepage():
-    tipo_usuario = 'equipe'
+    tipo_usuario = 'comum'
     if tipo_usuario == 'equipe':
         return render_template('equipe/inicio.html')
     if tipo_usuario == 'organizador':
@@ -39,10 +39,9 @@ def apostas():
 @app.route('/equipe/campeonatos/<int:id>')
 def equipe_campeonato(id):
     if id == 1:
-        return render_template('equipe/campeonato-inscrito.html', campeonato='')
-
-
-
+        return render_template('equipe/campeonato.html', campeonato_inscrito=True)
+    elif id == 2:
+        return render_template('equipe/campeonato.html', campeonato_inscrito=False)
 
 
 if __name__ == '__main__':
