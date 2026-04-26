@@ -51,5 +51,9 @@ def equipe_campeonatos():
 def equipe_historico():
     return render_template('equipe/historico.html')
 
+@app.route('/equipe/<int:id>/subequipes')
+def equipe_subequipes(id):
+    return render_template('equipe/subequipes.html', tipo_categoria = 'peso')
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% if tipo_categoria == 'peso' %}
+    {% set categoria = 'Atletas' %}
+{% elif tipo_categoria == 'sub' %}
+    {% set categoria = 'Subdivisões'%}
+{% endif %}
+
+{% block titulo %}{{ categoria }}{% endblock %}
+
+{% block opcoes %}
+    <a href="/equipe/campeonatos">Disponíveis</a>
+    <a href="">Convites</a>
+    <a href="/equipe/1/subequipes">Atletas/Subs</a>
+    <a href="/equipe/historico">Histórico</a>
+{% endblock %}
+
+{% block content %}
+    <h2>
+        {{ categoria.upper() }} DA EQUIPE
+    </h2>
+    <input type="search" name="" id="" placeholder="Pesquisar">
+
+    <div class="container">
+        <h3>
+            Atleta/Subdivisão exemplo
+        </h3>
+        <img src="" alt="Imagem do atleta/subdivisão">
+        <p>
+            Informações
+        </p>
+        <label><input type="checkbox" name="" id="">Disponível para campeonato</label>
+    </div>
+{% endblock %}
