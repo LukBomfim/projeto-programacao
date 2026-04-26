@@ -3,14 +3,14 @@ from flask import Flask, render_template, url_for
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
 
-tipo_usuario = 'equipe'
+tipo_usuario = 'organizacao'
 
 @app.route('/')
 def homepage():
     if tipo_usuario == 'equipe':
         return render_template('equipe/inicio.html')
-    if tipo_usuario == 'organizador':
-        return render_template('organizador/inicio.html')
+    if tipo_usuario == 'organizacao':
+        return render_template('organizacao/inicio.html')
     else:
         return render_template('index.html')
 
@@ -28,8 +28,8 @@ def perfil():
         return render_template('comum/conta.html')
     elif tipo_usuario == 'equipe':
         return render_template('equipe/conta.html')
-    elif tipo_usuario == 'organizador':
-        return render_template('organizador/conta.html')
+    elif tipo_usuario == 'organizacao':
+        return render_template('organizacao/conta.html')
 
 @app.route('/campeonatos/<int:id>')
 def campeonato(id):
