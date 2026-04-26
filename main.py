@@ -2,9 +2,11 @@ from flask import Flask, render_template, url_for
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
 
+
+tipo_usuario = 'equipe'
+
 @app.route('/')
 def homepage():
-    tipo_usuario = 'comum'
     if tipo_usuario == 'equipe':
         return render_template('equipe/inicio.html')
     if tipo_usuario == 'organizador':
@@ -22,7 +24,6 @@ def cadastro():
 
 @app.route('/perfil')
 def perfil():
-    tipo_usuario = 'equipe'
     if tipo_usuario == 'comum':
         return render_template('comum/conta.html')
     elif tipo_usuario == 'equipe':
@@ -64,6 +65,10 @@ def equipe_historico():
 @app.route('/equipe/<int:id>/subequipes')
 def equipe_subequipes(id):
     return render_template('equipe/subequipes.html', tipo_categoria = 'peso')
+
+@app.route('/equipe/convites')
+def equipe_convites():
+    return render_template('equipe/convites.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
