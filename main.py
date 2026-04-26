@@ -4,7 +4,7 @@ app = Flask(__name__, template_folder='frontend/templates', static_folder='front
 
 @app.route('/')
 def homepage():
-    tipo_usuario = 'equipe'
+    tipo_usuario = 'comum'
     if tipo_usuario == 'equipe':
         return render_template('equipe/inicio.html')
     if tipo_usuario == 'organizador':
@@ -19,6 +19,16 @@ def login():
 @app.route('/cadastro')
 def cadastro():
     return render_template('cadastro.html')
+
+@app.route('/perfil')
+def perfil():
+    tipo_usuario = 'equipe'
+    if tipo_usuario == 'comum':
+        return render_template('comum/conta.html')
+    elif tipo_usuario == 'equipe':
+        return render_template('equipe/conta.html')
+    elif tipo_usuario == 'organizador':
+        return render_template('organizador/conta.html')
 
 @app.route('/campeonatos/<int:id>')
 def campeonato(id):
