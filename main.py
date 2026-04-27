@@ -6,7 +6,7 @@ app = Flask(
     static_folder='frontend/static'
 )
 
-tipo_usuario = 'equipe'
+tipo_usuario = 'organizacao'
 
 @app.route('/')
 def homepage():
