@@ -1,0 +1,29 @@
+{% extends "organizacao/base.html" %}
+
+{% block titulo %}Novo Campeonato{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Novo Campeonato</h2>
+        
+        <form method="post">
+            <label>Nome do campeonato:<input type="text" name="" id="" placeholder="Campeonato X"></label>
+            <label>Data de início:<input type="date" name="" id=""></label>
+            <label>Data de término:<input type="date" name="" id=""></label>
+            <label>Modalidade:
+                <select name="" id="">
+                    <option value="">Selecione a modalidade</option>
+                    <option value="">Futebol</option>
+                    <option value="">Basquete</option>
+                    <option value="">MMA</option>
+                    <option value="">Judô</option>
+                    <option value="">Jiu-Jitsu</option>
+                </select>
+            </label>
+            <label>Quantidade de participantes:<input type="number" name="" id="" placeholder="Número de participantes"></label>
+            <label>Descrição: <input type="text" name="" id="" placeholder="Descrição do campeonato"></label>
+            
+            <button type="submit">Criar Campeonato</button>
+        </form>
+    </div>
+{% endblock %}

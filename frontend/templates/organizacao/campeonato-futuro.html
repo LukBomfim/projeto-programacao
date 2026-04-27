@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block titulo %}Campeonato{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Campeonato Exemplo</h1>
+    <p>
+        <strong>Descrição:</strong> 
+        <input type="text" value="Descrição do campeonato" disabled>
+    </p>
+    <p>
+        <strong>Data de Início:</strong> 
+        <input type="date" value="2000-1-1" disabled>
+    </p>
+    <p>
+        <strong>Data de Fim:</strong> 
+        <input type="date" value="2000-1-1" disabled>
+    </p>
+    <p>
+        <strong>Status:</strong> 
+        <input type="text" value="Em Andamento" disabled>
+    </p>
+    <!-- Adicione outras informações conforme necessário -->
+
+    <h2>Equipes Participantes</h2>
+    <ul>
+        <li>
+            <a href="">Equipe Exemplo</a>
+        </li>
+        <li>
+            <a href="">Equipe Exemplo 2</a>
+        </li>
+    </ul>
+
+    <h2>Convidar Equipes</h2>
+    <form method="post">
+        <label for="equipes">Selecione as equipes para convidar:</label>
+
+        <input type="search" name="" id="" placeholder="Pesquisar equipes">
+        <select multiple>
+            <option value="">
+                Equipe Exemplo 1
+            </option>
+            <option value="">
+                Equipe Exemplo 2
+            </option>
+        </select>
+        <button type="submit">Convidar</button>
+    </form>
+</div>
+{% endblock %}
