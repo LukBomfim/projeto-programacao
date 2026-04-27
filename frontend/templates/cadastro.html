@@ -108,29 +108,35 @@
         document.getElementById('campos-equipe').style.display = 'none'
         document.getElementById('campos-organizacao').style.display = 'none'
         document.getElementById('btn-cadastrar').style.display = 'none'
+        desabilitar('campos-comum')
+        desabilitar('campos-equipe')
+        desabilitar('campos-organizacao')
 
         if (tipo === "usuario") {
         document.getElementById('campos-comum').style.display = 'block'
         document.getElementById('btn-cadastrar').style.display = 'block'
+        habilitar('campos-comum')
         }
         if (tipo === "equipe") {
         document.getElementById('campos-equipe').style.display = 'block'
         document.getElementById('btn-cadastrar').style.display = 'block'
+        habilitar('campos-equipe')    
         }
         if (tipo === "organizacao") {
         document.getElementById('campos-organizacao').style.display = 'block'
         document.getElementById('btn-cadastrar').style.display = 'block'
+        habilitar('campos-organizacao')
         }
     })
 
     function desabilitar(id) {
-        document.querySelectorAll('#' + id + 'input, #' + id + 'select').forEach(function(campo){
+        document.querySelectorAll('#' + id + ' input, #' + id + 'select').forEach(function(campo){
             campo.disabled = true
         })
     }
 
     function habilitar(id) {
-        document.querySelectorAll('#' + id + 'input, #' + id + 'select').forEach(function(campo){
+        document.querySelectorAll('#' + id + ' input, #' + id + 'select').forEach(function(campo){
             campo.disabled = false
         })
     }
