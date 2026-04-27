@@ -6,7 +6,7 @@ app = Flask(
     static_folder='frontend/static'
 )
 
-tipo_usuario = 'organizacao'
+tipo_usuario = 'equipe'
 
 @app.route('/')
 def homepage():
@@ -68,6 +68,8 @@ def campeonato(id):
             return render_template('organizacao/campeonato-futuro.html', campeonato=campeonato)
         elif id == 2:
             return render_template('organizacao/campeonato-ativo.html', campeonato=campeonato)
+        elif id == 3:
+            return render_template('organizacao/campeonato-passado.html', campeonato=campeonato)
     if tipo_usuario == 'equipe':
         return render_template('equipe/campeonato.html', campeonato=campeonato)
     
