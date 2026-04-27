@@ -6,7 +6,7 @@ app = Flask(
     static_folder='frontend/static'
 )
 
-tipo_usuario = 'comum'
+tipo_usuario = 'equipe'
 
 @app.route('/')
 def homepage():
@@ -115,4 +115,4 @@ def organizacao_conta():
     return render_template('organizacao/conta.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
