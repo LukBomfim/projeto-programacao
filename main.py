@@ -6,7 +6,7 @@ app = Flask(
     static_folder='frontend/static'
 )
 
-tipo_usuario = 'equipe'
+tipo_usuario = 'organizacao'
 
 @app.route('/')
 def homepage():
@@ -108,10 +108,6 @@ def equipe_campeonato(id):
 def equipe_convites():
     return render_template('equipe/convites.html')
 
-@app.route('/equipe/historico')
-def equipe_historico():
-    return render_template('equipe/historico.html')
-
 @app.route('/equipe/<int:id>/subequipes')
 def equipe_subequipes(id):
     return render_template('equipe/subequipes.html', tipo_categoria='peso')
@@ -120,5 +116,12 @@ def equipe_subequipes(id):
 def organizacao_novo_campeonato():
     return render_template('organizacao/novo-campeonato.html')
 
+@app.route('/historico')
+def historico():
+    if tipo_usuario == 'organizacao':
+        return render_template('organizacao/historico.html')
+    elif tipo_usuario == 'equipe':
+        return render_template('equipe/historico.html')
+    
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
