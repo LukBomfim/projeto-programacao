@@ -1,8 +1,74 @@
 import sqlite3
 import hashlib
 import os
+import re
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'bet404.db')
+
+
+# ── Validações ────────────────────────────────────────────────────────────────
+
+def validar_email(email: str) -> bool:
+    return bool(re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email))
+
+def validar_cpf(cpf: str) -> bool:
+    apenas_numeros = re.sub(r'\D', '', cpf)
+    return len(apenas_numeros) == 11
+
+def validar_cnpj(cnpj: str) -> bool:
+    apenas_numeros = re.sub(r'\D', '', cnpj)
+    return len(apenas_numeros) == 14
+
+def validar_senha(senha: str) -> bool:
+    return len(senha) >= 6
+
+def validar_cadastro_usuario(nome, cpf, nascimento, numero, email, senha, confirmar_senha):
+    erros = []
+    if not nome.strip():
+        erros.append("Nome é obrigatório.")
+    if not validar_cpf(cpf):
+        erros.append("CPF inválido — deve conter 11 dígitos.")
+    if not nascimento:
+        erros.append("Data de nascimento é obrigatória.")
+    if not validar_email(email):
+        erros.append("E-mail inválido.")
+    if not validar_senha(senha):
+        erros.append("A senha deve ter pelo menos 6 caracteres.")
+    if senha != confirmar_senha:
+        erros.append("As senhas não coincidem.")
+    return erros
+
+def validar_cadastro_equipe(nome, cnpj, email, senha, confirmar_senha, modalidade):
+    erros = []
+    if not nome.strip():
+        erros.append("Nome da equipe é obrigatório.")
+    if not validar_cnpj(cnpj):
+        erros.append("CNPJ inválido — deve conter 14 dígitos.")
+    if not validar_email(email):
+        erros.append("E-mail inválido.")
+    if not validar_senha(senha):
+        erros.append("A senha deve ter pelo menos 6 caracteres.")
+    if senha != confirmar_senha:
+        erros.append("As senhas não coincidem.")
+    if not modalidade:
+        erros.append("Selecione uma modalidade.")
+    return erros
+
+def validar_cadastro_organizacao(nome, cnpj, email, senha, confirmar_senha, modalidades):
+    erros = []
+    if not nome.strip():
+        erros.append("Nome da organização é obrigatório.")
+    if not validar_cnpj(cnpj):
+        erros.append("CNPJ inválido — deve conter 14 dígitos.")
+    if not validar_email(email):
+        erros.append("E-mail inválido.")
+    if not validar_senha(senha):
+        erros.append("A senha deve ter pelo menos 6 caracteres.")
+    if senha != confirmar_senha:
+        erros.append("As senhas não coincidem.")
+    if not modalidades:
+        erros.append("Selecione pelo menos uma modalidade.")
+    return erros
 
 
 def get_connection():

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from database import (
     init_db, popular_dados_exemplo,
     criar_usuario, criar_equipe, criar_organizacao, autenticar_usuario,
+    validar_cadastro_usuario, validar_cadastro_equipe, validar_cadastro_organizacao,
     listar_campeonatos, buscar_campeonato, criar_campeonato,
     atualizar_status_campeonato, campeonatos_da_organizacao,
     buscar_partida, listar_partidas, criar_partida, finalizar_partida,
@@ -65,48 +66,73 @@ def logout():
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     if request.method == 'POST':
-        tipo  = request.form.get('tipo_conta')
-        senha = request.form.get('password', '')
+        tipo             = request.form.get('tipo_conta')
+        senha            = request.form.get('password', '')
+        confirmar_senha  = request.form.get('confirmar_senha', '')
+
         if tipo == 'usuario':
-            ok, msg = criar_usuario(
-                nome=request.form.get('nome', ''),
-                cpf=request.form.get('cpf', ''),
-                nascimento=request.form.get('nascimento', ''),
-                numero=request.form.get('numero', ''),
-                email=request.form.get('email', ''),
-                senha=senha,
-            )
+            nome       = request.form.get('nome', '')
+            cpf        = request.form.get('cpf', '')
+            nascimento = request.form.get('nascimento', '')
+            numero     = request.form.get('numero', '')
+            email      = request.form.get('email', '')
+
+            erros = validar_cadastro_usuario(nome, cpf, nascimento, numero, email, senha, confirmar_senha)
+            if erros:
+                for erro in erros:
+                    flash(erro, 'error')
+                return render_template('cadastro.html')
+
+            ok, msg = criar_usuario(nome=nome, cpf=cpf, nascimento=nascimento,
+                                    numero=numero, email=email, senha=senha)
             if ok:
                 flash(msg, 'success')
                 return redirect(url_for('login'))
             flash(msg, 'error')
+
         elif tipo == 'equipe':
-            ok, msg = criar_equipe(
-                nome=request.form.get('nome_equipe', ''),
-                cnpj=request.form.get('cnpj', ''),
-                numero=request.form.get('numero', ''),
-                email=request.form.get('email', ''),
-                senha=senha,
-                modalidade=request.form.get('modalidade', ''),
-            )
+            nome       = request.form.get('nome_equipe', '')
+            cnpj       = request.form.get('cnpj', '')
+            numero     = request.form.get('numero', '')
+            email      = request.form.get('email', '')
+            modalidade = request.form.get('modalidade', '')
+
+            erros = validar_cadastro_equipe(nome, cnpj, email, senha, confirmar_senha, modalidade)
+            if erros:
+                for erro in erros:
+                    flash(erro, 'error')
+                return render_template('cadastro.html')
+
+            ok, msg = criar_equipe(nome=nome, cnpj=cnpj, numero=numero,
+                                   email=email, senha=senha, modalidade=modalidade)
             if ok:
                 flash(msg, 'success')
                 return redirect(url_for('login'))
             flash(msg, 'error')
+
         elif tipo == 'organizacao':
+            nome        = request.form.get('nome_equipe', '')
+            cnpj        = request.form.get('cnpj', '')
+            numero      = request.form.get('numero', '')
+            email       = request.form.get('email', '')
             modalidades = request.form.getlist('modalidades')
-            ok, msg = criar_organizacao(
-                nome=request.form.get('nome_equipe', ''),
-                cnpj=request.form.get('cnpj', ''),
-                numero=request.form.get('numero', ''),
-                email=request.form.get('email', ''),
-                senha=senha,
-                modalidades=modalidades,
-            )
+
+            erros = validar_cadastro_organizacao(nome, cnpj, email, senha, confirmar_senha, modalidades)
+            if erros:
+                for erro in erros:
+                    flash(erro, 'error')
+                return render_template('cadastro.html')
+
+            ok, msg = criar_organizacao(nome=nome, cnpj=cnpj, numero=numero,
+                                        email=email, senha=senha, modalidades=modalidades)
             if ok:
                 flash(msg, 'success')
                 return redirect(url_for('login'))
             flash(msg, 'error')
+
+        else:
+            flash('Selecione um tipo de conta.', 'error')
+
     return render_template('cadastro.html')
 
 @app.route('/perfil')
