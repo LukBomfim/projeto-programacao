@@ -11,11 +11,8 @@ from database import (
     apostas_do_usuario, fazer_aposta,
 )
 
-app = Flask(
-    __name__,
-    template_folder='frontend/templates',
-    static_folder='frontend/static'
-)
+app = Flask(__name__, template_folder='../frontend/templates', static_folder='../frontend/static')
+
 app.secret_key = 'bet404-secret-key-2026'
 
 # Inicializa o banco na inicialização
