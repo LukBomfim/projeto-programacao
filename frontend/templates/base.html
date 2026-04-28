@@ -17,6 +17,10 @@
             <a href="/">Início</a>
             {% block navbar %}{% endblock %}
             <a href="/perfil">Sua conta</a>
+
+             {% if session.get('tipo') %}
+                <a href="{{ url_for('logout') }}">Sair</a>
+            {% endif %}
         </nav>
 
         <nav aria-label="nav secundario">
