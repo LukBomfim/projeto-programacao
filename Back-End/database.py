@@ -16,7 +16,6 @@ def init_db():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # ── Usuário comum ────────────────────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuario (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,7 +30,6 @@ def init_db():
         )
     ''')
 
-    # ── Equipe esportiva ─────────────────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS equipe (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,7 +43,6 @@ def init_db():
         )
     ''')
 
-    # ── Organização ──────────────────────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS organizacao (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,7 +55,6 @@ def init_db():
         )
     ''')
 
-    # Modalidades que uma organização suporta (N:N)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS organizacao_modalidade (
             organizacao_id  INTEGER NOT NULL REFERENCES organizacao(id) ON DELETE CASCADE,
@@ -67,7 +63,6 @@ def init_db():
         )
     ''')
 
-    # ── Campeonato ───────────────────────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS campeonato (
             id               INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -84,7 +79,6 @@ def init_db():
         )
     ''')
 
-    # ── Inscrição de equipe em campeonato ────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS inscricao (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,7 +91,6 @@ def init_db():
         )
     ''')
 
-    # ── Convite (organização convida equipe) ─────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS convite (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -110,7 +103,6 @@ def init_db():
         )
     ''')
 
-    # ── Partida ──────────────────────────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS partida (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -126,7 +118,6 @@ def init_db():
         )
     ''')
 
-    # ── Atleta / Subdivisão de equipe ────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS atleta (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -139,7 +130,6 @@ def init_db():
         )
     ''')
 
-    # ── Aposta ───────────────────────────────────────────────────────────────
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS aposta (
             id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -158,14 +148,8 @@ def init_db():
     conn.close()
     print(f"[DB] Banco de dados inicializado em: {DB_PATH}")
 
-
-# ── Helpers de senha ─────────────────────────────────────────────────────────
-
 def hash_senha(senha: str) -> str:
     return hashlib.sha256(senha.encode()).hexdigest()
-
-
-# ── CRUD: Usuário ─────────────────────────────────────────────────────────────
 
 def criar_usuario(nome, cpf, nascimento, numero, email, senha):
     conn = get_connection()
@@ -181,16 +165,13 @@ def criar_usuario(nome, cpf, nascimento, numero, email, senha):
     finally:
         conn.close()
 
-
 def buscar_usuario_por_cpf(cpf):
     conn = get_connection()
     row = conn.execute("SELECT * FROM usuario WHERE cpf = ?", (cpf,)).fetchone()
     conn.close()
     return row
 
-
 def autenticar_usuario(cpf_ou_cnpj, senha):
-    """Retorna (tipo, objeto) ou (None, None)."""
     h = hash_senha(senha)
     conn = get_connection()
     u = conn.execute("SELECT * FROM usuario WHERE cpf = ? AND senha_hash = ?", (cpf_ou_cnpj, h)).fetchone()
@@ -208,9 +189,6 @@ def autenticar_usuario(cpf_ou_cnpj, senha):
     conn.close()
     return None, None
 
-
-# ── CRUD: Equipe ──────────────────────────────────────────────────────────────
-
 def criar_equipe(nome, cnpj, numero, email, senha, modalidade):
     conn = get_connection()
     try:
@@ -225,15 +203,11 @@ def criar_equipe(nome, cnpj, numero, email, senha, modalidade):
     finally:
         conn.close()
 
-
 def buscar_equipe(equipe_id):
     conn = get_connection()
     row = conn.execute("SELECT * FROM equipe WHERE id = ?", (equipe_id,)).fetchone()
     conn.close()
-    return row
-
-
-# ── CRUD: Organização ─────────────────────────────────────────────────────────
+    return dict(row) if row else None
 
 def criar_organizacao(nome, cnpj, numero, email, senha, modalidades: list):
     conn = get_connection()
@@ -256,8 +230,6 @@ def criar_organizacao(nome, cnpj, numero, email, senha, modalidades: list):
         conn.close()
 
 
-# ── CRUD: Campeonato ──────────────────────────────────────────────────────────
-
 def criar_campeonato(organizacao_id, nome, modalidade, data_inicio, data_fim, max_participantes, descricao):
     conn = get_connection()
     conn.execute(
@@ -277,14 +249,14 @@ def listar_campeonatos(status=None):
     else:
         rows = conn.execute("SELECT * FROM campeonato ORDER BY data_inicio").fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
 
 def buscar_campeonato(campeonato_id):
     conn = get_connection()
     row = conn.execute("SELECT * FROM campeonato WHERE id = ?", (campeonato_id,)).fetchone()
     conn.close()
-    return row
+    return dict(row) if row else None
 
 
 def atualizar_status_campeonato(campeonato_id, status):
@@ -301,10 +273,8 @@ def campeonatos_da_organizacao(organizacao_id):
         (organizacao_id,)
     ).fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
-
-# ── CRUD: Convite ─────────────────────────────────────────────────────────────
 
 def enviar_convite(campeonato_id, equipe_id):
     conn = get_connection()
@@ -330,7 +300,7 @@ def convites_da_equipe(equipe_id):
         WHERE c.equipe_id = ? AND c.status = 'pendente'
     ''', (equipe_id,)).fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
 
 def responder_convite(convite_id, aceito: bool):
@@ -341,7 +311,6 @@ def responder_convite(convite_id, aceito: bool):
     conn.close()
 
 
-# ── CRUD: Inscrição ───────────────────────────────────────────────────────────
 
 def inscrever_equipe(campeonato_id, equipe_id):
     conn = get_connection()
@@ -368,10 +337,8 @@ def campeonatos_da_equipe(equipe_id):
         ORDER BY camp.data_inicio DESC
     ''', (equipe_id,)).fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
-
-# ── CRUD: Partida ─────────────────────────────────────────────────────────────
 
 def criar_partida(campeonato_id, equipe_a_id, equipe_b_id, data):
     conn = get_connection()
@@ -398,7 +365,7 @@ def buscar_partida(partida_id):
         WHERE p.id = ?
     ''', (partida_id,)).fetchone()
     conn.close()
-    return row
+    return dict(row) if row else None
 
 
 def listar_partidas(status=None):
@@ -423,7 +390,7 @@ def listar_partidas(status=None):
             ORDER BY p.data
         ''').fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
 
 def finalizar_partida(partida_id, resultado_a, resultado_b):
@@ -435,8 +402,6 @@ def finalizar_partida(partida_id, resultado_a, resultado_b):
     conn.commit()
     conn.close()
 
-
-# ── CRUD: Atleta ──────────────────────────────────────────────────────────────
 
 def adicionar_atleta(equipe_id, nome, categoria, foto_path=None):
     conn = get_connection()
@@ -455,7 +420,7 @@ def atletas_da_equipe(equipe_id):
         (equipe_id,)
     ).fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
 
 def remover_atleta(atleta_id):
@@ -465,7 +430,6 @@ def remover_atleta(atleta_id):
     conn.close()
 
 
-# ── CRUD: Aposta ──────────────────────────────────────────────────────────────
 
 def fazer_aposta(usuario_id, partida_id, equipe_vencedora_id, valor, odd=1.0):
     conn = get_connection()
@@ -500,13 +464,11 @@ def apostas_do_usuario(usuario_id):
         ORDER BY a.apostado_em DESC
     ''', (usuario_id,)).fetchall()
     conn.close()
-    return rows
+    return [dict(r) for r in rows]
 
-
-# ── Dados de exemplo ──────────────────────────────────────────────────────────
 
 def popular_dados_exemplo():
-    """Insere dados de demonstração se o banco estiver vazio."""
+
     conn = get_connection()
     if conn.execute("SELECT COUNT(*) FROM usuario").fetchone()[0] > 0:
         conn.close()
@@ -592,4 +554,4 @@ def popular_dados_exemplo():
 if __name__ == '__main__':
     init_db()
     popular_dados_exemplo()
-    print("[DB] Pronto!")
+    print("[DB] Pronto")

@@ -1,29 +1,30 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, session, flash
 from database import (
     init_db, popular_dados_exemplo,
     criar_usuario, criar_equipe, criar_organizacao, autenticar_usuario,
     listar_campeonatos, buscar_campeonato, criar_campeonato,
-    atualizar_status_campeonato, campeonatos_da_organizacao,
-    buscar_partida, listar_partidas, criar_partida, finalizar_partida,
-    convites_da_equipe, enviar_convite, responder_convite,
+    campeonatos_da_organizacao,
+    buscar_partida, listar_partidas,
+    convites_da_equipe, responder_convite,
     campeonatos_da_equipe, inscrever_equipe,
-    atletas_da_equipe, adicionar_atleta, remover_atleta,
+    atletas_da_equipe,
     apostas_do_usuario, fazer_aposta,
 )
 
 app = Flask(__name__, template_folder='../frontend/templates', static_folder='../frontend/static')
-
 app.secret_key = 'bet404-secret-key-2026'
 
-# Inicializa o banco na inicialização
 init_db()
 popular_dados_exemplo()
+
 
 def tipo_usuario():
     return session.get('tipo')
 
+
 def usuario_id():
     return session.get('usuario_id')
+
 
 @app.route('/')
 def homepage():
@@ -35,248 +36,240 @@ def homepage():
         return render_template('organizacao/inicio.html', campeonatos=campeonatos)
     else:
         partidas = listar_partidas(status='agendada')
-        return render_template('index.html', usuario='Usuário', partidas=partidas)
+        return render_template('index.html', usuario=session.get('nome', 'Usuário'), partidas=partidas)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        cpf_cnpj = request.form.get('cpf', '').strip()
-        senha    = request.form.get('password', '')
-        tipo, obj = autenticar_usuario(cpf_cnpj, senha)
+        cpf = request.form.get('cpf')
+        senha = request.form.get('password')
+
+        tipo, obj = autenticar_usuario(cpf, senha)
+
         if tipo:
-            session['tipo']       = tipo
+            session['tipo'] = tipo
             session['usuario_id'] = obj['id']
-            session['nome']       = obj['nome']
-            flash('Login realizado com sucesso!', 'success')
+            session['nome'] = obj['nome']
+
             if tipo == 'equipe':
-                return redirect(url_for('equipe_inicio'))
+                return redirect('/equipe')
             elif tipo == 'organizacao':
-                return redirect(url_for('organizacao_inicio'))
+                return redirect('/organizacao')
             else:
-                return redirect(url_for('homepage'))
-        flash('CPF/CNPJ ou senha inválidos.', 'error')
+                return redirect('/')
+
+        flash('Login inválido')
+
     return render_template('login.html')
+
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return redirect('/login')
+
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     if request.method == 'POST':
-        tipo  = request.form.get('tipo_conta')
-        senha = request.form.get('password', '')
+        tipo = request.form.get('tipo_conta')
+        senha = request.form.get('password')
+
         if tipo == 'usuario':
             ok, msg = criar_usuario(
-                nome=request.form.get('nome', ''),
-                cpf=request.form.get('cpf', ''),
-                nascimento=request.form.get('nascimento', ''),
-                numero=request.form.get('numero', ''),
-                email=request.form.get('email', ''),
-                senha=senha,
+                request.form.get('nome'),
+                request.form.get('cpf'),
+                request.form.get('nascimento'),
+                request.form.get('numero'),
+                request.form.get('email'),
+                senha
             )
-            if ok:
-                flash(msg, 'success')
-                return redirect(url_for('login'))
-            flash(msg, 'error')
+
         elif tipo == 'equipe':
             ok, msg = criar_equipe(
-                nome=request.form.get('nome_equipe', ''),
-                cnpj=request.form.get('cnpj', ''),
-                numero=request.form.get('numero', ''),
-                email=request.form.get('email', ''),
-                senha=senha,
-                modalidade=request.form.get('modalidade', ''),
+                request.form.get('nome_equipe'),
+                request.form.get('cnpj'),
+                request.form.get('numero'),
+                request.form.get('email'),
+                senha,
+                request.form.get('modalidade')
             )
-            if ok:
-                flash(msg, 'success')
-                return redirect(url_for('login'))
-            flash(msg, 'error')
+
         elif tipo == 'organizacao':
-            modalidades = request.form.getlist('modalidades')
             ok, msg = criar_organizacao(
-                nome=request.form.get('nome_equipe', ''),
-                cnpj=request.form.get('cnpj', ''),
-                numero=request.form.get('numero', ''),
-                email=request.form.get('email', ''),
-                senha=senha,
-                modalidades=modalidades,
+                request.form.get('nome_equipe'),
+                request.form.get('cnpj'),
+                request.form.get('numero'),
+                request.form.get('email'),
+                senha,
+                request.form.getlist('modalidades')
             )
-            if ok:
-                flash(msg, 'success')
-                return redirect(url_for('login'))
-            flash(msg, 'error')
+
+        flash(msg)
+        return redirect('/login')
+
     return render_template('cadastro.html')
+
 
 @app.route('/perfil')
 def perfil():
     tipo = tipo_usuario()
+
     if tipo == 'usuario':
         apostas = apostas_do_usuario(usuario_id())
         return render_template('comum/conta.html', apostas=apostas)
+
     elif tipo == 'equipe':
         return render_template('equipe/conta.html')
+
     elif tipo == 'organizacao':
         return render_template('organizacao/conta.html')
-    return redirect(url_for('login'))
+
+    return redirect('/login')
+
+
+@app.route('/historico')
+def historico():
+    tipo = tipo_usuario()
+
+    if tipo == 'equipe':
+        camps = campeonatos_da_equipe(usuario_id())
+        return render_template('equipe/historico.html', campeonatos=camps)
+
+    elif tipo == 'organizacao':
+        camps = campeonatos_da_organizacao(usuario_id())
+        return render_template('organizacao/historico.html', campeonatos=camps)
+
+    return redirect('/')
+
 
 @app.route('/apostas')
 def apostas():
-    partidas_abertas     = listar_partidas(status='agendada')
-    partidas_finalizadas = listar_partidas(status='finalizada')
-    return render_template('comum/apostas.html',
-        partidas_abertas=partidas_abertas,
-        partidas_finalizadas=partidas_finalizadas)
+    abertas = listar_partidas(status='agendada')
+    finalizadas = listar_partidas(status='finalizada')
+
+    return render_template(
+        'comum/apostas.html',
+        partidas_abertas=abertas,
+        partidas_finalizadas=finalizadas
+    )
+
 
 @app.route('/apostas/fazer/<int:partida_id>', methods=['POST'])
 def fazer_aposta_route(partida_id):
     if tipo_usuario() != 'usuario':
-        flash('Apenas usuários comuns podem apostar.', 'error')
-        return redirect(url_for('apostas'))
-    equipe_id = request.form.get('equipe_vencedora_id', type=int)
-    valor     = request.form.get('valor', type=float)
-    ok, msg   = fazer_aposta(usuario_id(), partida_id, equipe_id, valor)
-    flash(msg, 'success' if ok else 'error')
-    return redirect(url_for('apostas'))
+        return redirect('/apostas')
+
+    equipe_id = int(request.form.get('equipe_vencedora_id'))
+    valor = float(request.form.get('valor'))
+
+    ok, msg = fazer_aposta(usuario_id(), partida_id, equipe_id, valor)
+    flash(msg)
+
+    return redirect('/apostas')
+
 
 @app.route('/campeonatos/<int:id>')
 def campeonato(id):
     camp = buscar_campeonato(id)
+
     if not camp:
-        flash('Campeonato não encontrado.', 'error')
-        return redirect(url_for('homepage'))
+        return redirect('/')
+
     tipo = tipo_usuario()
+
     if tipo == 'organizacao':
-        if camp['status'] == 'futuro':
-            return render_template('organizacao/campeonato-futuro.html', campeonato=camp)
-        elif camp['status'] == 'ativo':
-            return render_template('organizacao/campeonato-ativo.html', campeonato=camp)
-        else:
-            return render_template('organizacao/campeonato-passado.html', campeonato=camp)
+        return render_template('organizacao/campeonato.html', campeonato=camp)
+
     if tipo == 'equipe':
         inscrito = any(c['id'] == id for c in campeonatos_da_equipe(usuario_id()))
         return render_template('equipe/campeonato.html', campeonato=camp, campeonato_inscrito=inscrito)
+
     return render_template('comum/campeonato.html', campeonato=camp)
+
 
 @app.route('/partidas/<int:id>')
 def partida(id):
     p = buscar_partida(id)
+
     if not p:
-        flash('Partida não encontrada.', 'error')
-        return redirect(url_for('homepage'))
+        return redirect('/')
+
     if p['status'] == 'finalizada':
         return render_template('comum/partida-finalizada.html', partida=p)
+
     return render_template('comum/partida.html', partida=p)
+
 
 @app.route('/equipe')
 def equipe_inicio():
     return render_template('equipe/inicio.html')
 
-@app.route('/equipe/conta')
-def equipe_conta():
-    return render_template('equipe/conta.html')
 
 @app.route('/equipe/campeonatos')
 def equipe_campeonatos():
-    todos = listar_campeonatos(status='futuro')
-    ids_inscritos = {c['id'] for c in campeonatos_da_equipe(usuario_id())} if tipo_usuario() == 'equipe' else set()
-    return render_template('equipe/campeonatos.html', campeonatos=todos, ids_inscritos=ids_inscritos)
+    camps = listar_campeonatos(status='futuro')
+    inscritos = campeonatos_da_equipe(usuario_id())
+
+    return render_template('equipe/campeonatos.html', campeonatos=camps, inscritos=inscritos)
+
 
 @app.route('/equipe/campeonatos/<int:id>')
 def equipe_campeonato(id):
-    camp     = buscar_campeonato(id)
-    inscrito = tipo_usuario() == 'equipe' and any(c['id'] == id for c in campeonatos_da_equipe(usuario_id()))
+    camp = buscar_campeonato(id)
+    inscrito = any(c['id'] == id for c in campeonatos_da_equipe(usuario_id()))
+
     return render_template('equipe/campeonato.html', campeonato=camp, campeonato_inscrito=inscrito)
 
-@app.route('/equipe/inscrever/<int:campeonato_id>', methods=['POST'])
-def equipe_inscrever(campeonato_id):
-    if tipo_usuario() != 'equipe':
-        flash('Apenas equipes podem se inscrever.', 'error')
-        return redirect(url_for('equipe_campeonatos'))
-    inscrever_equipe(campeonato_id, usuario_id())
-    flash('Inscrição realizada!', 'success')
-    return redirect(url_for('equipe_campeonato', id=campeonato_id))
+
+@app.route('/equipe/inscrever/<int:id>', methods=['POST'])
+def inscrever(id):
+    inscrever_equipe(id, usuario_id())
+    return redirect(f'/equipe/campeonatos/{id}')
+
 
 @app.route('/equipe/convites')
 def equipe_convites():
-    convites = convites_da_equipe(usuario_id()) if tipo_usuario() == 'equipe' else []
+    convites = convites_da_equipe(usuario_id())
     return render_template('equipe/convites.html', convites=convites)
 
-@app.route('/equipe/convites/<int:convite_id>/responder', methods=['POST'])
-def responder_convite_route(convite_id):
-    aceito = request.form.get('resposta') == 'aceitar'
-    responder_convite(convite_id, aceito)
-    flash('Convite ' + ('aceito' if aceito else 'recusado') + '.', 'success')
-    return redirect(url_for('equipe_convites'))
+
+@app.route('/equipe/convites/<int:id>/responder', methods=['POST'])
+def responder_convite_route(id):
+    resposta = request.form.get('resposta') == 'aceitar'
+    responder_convite(id, resposta)
+    return redirect('/equipe/convites')
+
 
 @app.route('/equipe/<int:id>/subequipes')
 def equipe_subequipes(id):
     atletas = atletas_da_equipe(id)
     return render_template('equipe/subequipes.html', tipo_categoria='peso', atletas=atletas)
 
-@app.route('/equipe/<int:id>/atleta/adicionar', methods=['POST'])
-def adicionar_atleta_route(id):
-    adicionar_atleta(id, request.form.get('nome', ''), request.form.get('categoria', ''))
-    flash('Atleta adicionado!', 'success')
-    return redirect(url_for('equipe_subequipes', id=id))
-
-@app.route('/equipe/atleta/<int:atleta_id>/remover', methods=['POST'])
-def remover_atleta_route(atleta_id):
-    eid = usuario_id()
-    remover_atleta(atleta_id)
-    flash('Atleta removido.', 'success')
-    return redirect(url_for('equipe_subequipes', id=eid))
 
 @app.route('/organizacao')
 def organizacao_inicio():
-    campeonatos = campeonatos_da_organizacao(usuario_id()) if tipo_usuario() == 'organizacao' else []
-    return render_template('organizacao/inicio.html', campeonatos=campeonatos)
+    camps = campeonatos_da_organizacao(usuario_id())
+    return render_template('organizacao/inicio.html', campeonatos=camps)
 
-@app.route('/organizacao/novo-campeonato', methods=['GET', 'POST'])
-def organizacao_novo_campeonato():
+
+@app.route('/organizacao/novo', methods=['GET', 'POST'])
+def novo_campeonato():
     if request.method == 'POST':
         criar_campeonato(
-            organizacao_id=usuario_id(),
-            nome=request.form.get('nome', ''),
-            modalidade=request.form.get('modalidade', ''),
-            data_inicio=request.form.get('data_inicio', ''),
-            data_fim=request.form.get('data_fim', ''),
-            max_participantes=request.form.get('max_participantes', 16, type=int),
-            descricao=request.form.get('descricao', ''),
+            usuario_id(),
+            request.form.get('nome'),
+            request.form.get('modalidade'),
+            request.form.get('data_inicio'),
+            request.form.get('data_fim'),
+            int(request.form.get('max_participantes')),
+            request.form.get('descricao')
         )
-        flash('Campeonato criado com sucesso!', 'success')
-        return redirect(url_for('organizacao_inicio'))
+        return redirect('/organizacao')
+
     return render_template('organizacao/novo-campeonato.html')
 
-@app.route('/organizacao/campeonato/<int:campeonato_id>/status', methods=['POST'])
-def atualizar_campeonato_status(campeonato_id):
-    novo = request.form.get('status', '')
-    if novo in ('futuro', 'ativo', 'encerrado'):
-        atualizar_status_campeonato(campeonato_id, novo)
-        flash('Status atualizado.', 'success')
-    return redirect(url_for('campeonato', id=campeonato_id))
-
-@app.route('/organizacao/campeonato/<int:campeonato_id>/convidar', methods=['POST'])
-def convidar_equipe(campeonato_id):
-    equipe_id = request.form.get('equipe_id', type=int)
-    if equipe_id:
-        enviar_convite(campeonato_id, equipe_id)
-        flash('Convite enviado!', 'success')
-    return redirect(url_for('campeonato', id=campeonato_id))
-
-@app.route('/historico')
-def historico():
-    tipo = tipo_usuario()
-    if tipo == 'organizacao':
-        todos = campeonatos_da_organizacao(usuario_id())
-        encerrados = [c for c in todos if c['status'] == 'encerrado']
-        return render_template('organizacao/historico.html', campeonatos=encerrados)
-    elif tipo == 'equipe':
-        todos    = campeonatos_da_equipe(usuario_id())
-        passados = [c for c in todos if c['status'] == 'encerrado']
-        return render_template('equipe/historico.html', campeonatos=passados)
-    return redirect(url_for('homepage'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
